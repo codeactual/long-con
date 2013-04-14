@@ -1,5 +1,5 @@
 {
-  "name": "node-console",
+  "name": "codeactual-node-console",
   "description": "Create a console logger w/ formatting, timestamp, color, namespace",
   "version": "0.1.0",
   "main": "index.js",
