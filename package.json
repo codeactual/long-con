@@ -1,0 +1,42 @@
+{
+  "name": "node-console",
+  "description": "Create a console logger w/ formatting, timestamp, color, namespace",
+  "version": "0.1.0",
+  "main": "index.js",
+  "keywords": [],
+  "contributors": [
+    {
+      "name": "David Smith",
+      "web": "https://github.com/codeactual/"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/codeactual/node-console/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codeactual/node-console.git"
+  },
+  "devDependencies": {
+    "chai": "~1.5.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-shell": "~0.2.2",
+    "mocha": "~1.9.0",
+    "sinon": "~1.6.0",
+    "sinon-chai": "~2.3.1",
+    "sinon-doublist": "~0.3.0"
+  },
+  "scripts": {
+    "test": "grunt build && mocha --reporter spec --recursive test/lib"
+  },
+  "gitemplate": {
+    "originSha": "2fe43ec799",
+    "originUrl": "/var/dev/gitemplate-node-component/.git"
+  },
+  "dependencies": {
+    "component": "~0.13.2"
+  }
+}

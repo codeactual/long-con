@@ -1,0 +1,18 @@
+{
+  "name": "node-console",
+  "repo": "codeactual/node-console",
+  "description": "Create a console logger w/ formatting, timestamp, color, namespace",
+  "version": "0.1.0",
+  "keywords": [],
+  "dependencies": {
+    "visionmedia/configurable.js": "f87ca5f",
+    "codeactual/extend": "0.1.0"
+  },
+  "development": {
+  },
+  "main": "lib/node-console/index.js",
+  "scripts": [
+    "lib/node-console/index.js"
+  ],
+  "license": "MIT"
+}
