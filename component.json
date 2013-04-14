@@ -6,10 +6,10 @@
   "keywords": [],
   "dependencies": {
     "visionmedia/configurable.js": "f87ca5f",
-    "codeactual/extend": "0.1.0"
+    "codeactual/extend": "0.1.0",
+    "qualiancy/tea-properties": "0.1.0"
   },
-  "development": {
-  },
+  "development": {},
   "main": "lib/node-console/index.js",
   "scripts": [
     "lib/node-console/index.js"

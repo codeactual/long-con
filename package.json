@@ -37,6 +37,7 @@
     "originUrl": "/var/dev/gitemplate-node-component/.git"
   },
   "dependencies": {
-    "component": "~0.13.2"
+    "component": "~0.13.2",
+    "cli-color": "~0.2.2"
   }
 }
