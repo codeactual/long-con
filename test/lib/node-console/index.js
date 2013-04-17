@@ -10,7 +10,7 @@ nc.requireNative = require;
 
 var requireComponent = nc.requireComponent;
 
-require('sinon-doublist').sinonDoublist(sinon, 'mocha');
+require('sinon-doublist')(sinon, 'mocha');
 
 describe('nc', function() {
   'use strict';
