@@ -126,6 +126,68 @@
             return object;
         };
     });
+    require.register("qualiancy-tea-properties/lib/properties.js", function(exports, require, module) {
+        var exports = module.exports = {};
+        exports.get = function(obj, path) {
+            var parsed = parsePath(path);
+            return getPathValue(parsed, obj);
+        };
+        exports.set = function(obj, path, val) {
+            var parsed = parsePath(path);
+            setPathValue(parsed, val, obj);
+        };
+        function defined(val) {
+            return "undefined" === typeof val;
+        }
+        function parsePath(path) {
+            var str = path.replace(/\[/g, ".["), parts = str.match(/(\\\.|[^.]+?)+/g);
+            return parts.map(function(value) {
+                var re = /\[(\d+)\]$/, mArr = re.exec(value);
+                if (mArr) return {
+                    i: parseFloat(mArr[1])
+                }; else return {
+                    p: value
+                };
+            });
+        }
+        function getPathValue(parsed, obj) {
+            var tmp = obj, res;
+            for (var i = 0, l = parsed.length; i < l; i++) {
+                var part = parsed[i];
+                if (tmp) {
+                    if (!defined(part.p)) tmp = tmp[part.p]; else if (!defined(part.i)) tmp = tmp[part.i];
+                    if (i == l - 1) res = tmp;
+                } else {
+                    res = undefined;
+                }
+            }
+            return res;
+        }
+        function setPathValue(parsed, val, obj) {
+            var tmp = obj;
+            for (var i = 0, l = parsed.length; i < l; i++) {
+                var part = parsed[i];
+                if (!defined(tmp)) {
+                    if (i == l - 1) {
+                        if (!defined(part.p)) tmp[part.p] = val; else if (!defined(part.i)) tmp[part.i] = val;
+                    } else {
+                        if (!defined(part.p) && tmp[part.p]) tmp = tmp[part.p]; else if (!defined(part.i) && tmp[part.i]) tmp = tmp[part.i]; else {
+                            var next = parsed[i + 1];
+                            if (!defined(part.p)) {
+                                tmp[part.p] = {};
+                                tmp = tmp[part.p];
+                            } else if (!defined(part.i)) {
+                                tmp[part.i] = [];
+                                tmp = tmp[part.i];
+                            }
+                        }
+                    }
+                } else {
+                    if (i == l - 1) tmp = val; else if (!defined(part.p)) tmp = {}; else if (!defined(part.i)) tmp = [];
+                }
+            }
+        }
+    });
     require.register("node-console/lib/node-console/index.js", function(exports, require, module) {
         "use strict";
         module.exports = {
@@ -135,21 +197,106 @@
             requireComponent: require,
             requireNative: null
         };
+        var clc;
+        var sprintf;
         var configurable = require("configurable.js");
         var extend = require("extend");
+        var tea = require("tea-properties");
+        var getProp = tea.get;
+        var setProp = tea.set;
         function create() {
             return new NodeConsole();
         }
         function NodeConsole() {
-            this.settings = {};
+            this.settings = {
+                namespace: "",
+                nlFirst: false,
+                quiet: false,
+                time: true,
+                traceIndent: "    ",
+                traceLanes: true
+            };
+            this.traceDepth = 0;
+            this.firstLine = true;
+            var requireNative = module.exports.requireNative;
+            clc = clc || requireNative("cli-color");
+            sprintf = sprintf || requireNative("util").format;
         }
         configurable(NodeConsole.prototype);
+        NodeConsole.prototype.log = function(name, fn, color, colorBody) {
+            if (this.get("quiet")) {
+                return;
+            }
+            var colorFn = color ? getProp(clc, color) : defColorFn;
+            var bodyColorFn = colorBody ? colorFn : defColorFn;
+            var namespace = this.get("namespace");
+            var indent = "";
+            var traceIndent = this.get("traceIndent");
+            var laneCx = traceIndent.length;
+            indent = new Array(this.traceDepth + 1).join(traceIndent);
+            if (this.get("traceLanes")) {
+                indent = indent.replace(new RegExp(".{1," + laneCx + "}", "g"), "|$&");
+            }
+            var sections = [ indent, this.get("time") ? "[" + new Date().toUTCString() + "] " : "", namespace ? namespace + " " : "", name ? colorFn(name) + " " : "", bodyColorFn(sprintf.apply(null, [].slice.call(arguments, 4))) ];
+            var joined = sections.join("");
+            if (this.firstLine && this.get("nlFirst")) {
+                joined = "\n" + joined;
+                this.firstLine = false;
+            }
+            fn(joined);
+        };
+        NodeConsole.prototype.create = function(name, fn, color, colorBody) {
+            var self = this;
+            function logger() {
+                self.log.apply(self, [ name, fn, color, colorBody ].concat([].slice.call(arguments)));
+            }
+            logger.push = function nodeConsolePush() {
+                logger.apply(self, arguments);
+                self.traceDepth++;
+            };
+            logger.pop = function nodeConsolePop() {
+                self.traceDepth--;
+                if (arguments.length) {
+                    logger.apply(self, arguments);
+                }
+            };
+            return logger;
+        };
+        NodeConsole.prototype.traceMethods = function(name, obj, logger, filter, omit) {
+            var self = this;
+            filter = filter || /.?/;
+            omit = omit || /a^/;
+            Object.keys(obj).forEach(function nodeConsoleTraceMethodsIter(key) {
+                if (typeof obj[key] !== "function") {
+                    return;
+                }
+                if (!filter.test(key)) {
+                    return;
+                }
+                if (omit.test(key)) {
+                    return;
+                }
+                var orig = obj[key];
+                obj[key] = function nodeConsoleTraceMethodsWrapper() {
+                    logger.push(name + "#" + key);
+                    var res = orig.apply(this, arguments);
+                    logger.pop();
+                    return res;
+                };
+            });
+        };
         function mixin(ext) {
-            extend(NodeConsole.prototype);
+            extend(NodeConsole.prototype, ext);
+        }
+        function defColorFn(str) {
+            return str;
         }
     });
     require.alias("visionmedia-configurable.js/index.js", "node-console/deps/configurable.js/index.js");
     require.alias("codeactual-extend/index.js", "node-console/deps/extend/index.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "node-console/deps/tea-properties/lib/properties.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "node-console/deps/tea-properties/index.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "qualiancy-tea-properties/index.js");
     require.alias("node-console/lib/node-console/index.js", "node-console/index.js");
     if (typeof exports == "object") {
         module.exports = require("node-console");
