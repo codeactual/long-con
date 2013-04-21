@@ -1,6 +1,6 @@
 {
-  "name": "node-console",
-  "repo": "codeactual/node-console",
+  "name": "long-con",
+  "repo": "codeactual/long-con",
   "description": "Create a console logger w/ formatting, timestamp, color, namespace",
   "version": "0.1.0",
   "keywords": [],
@@ -10,9 +10,9 @@
     "qualiancy/tea-properties": "0.1.0"
   },
   "development": {},
-  "main": "lib/node-console/index.js",
+  "main": "lib/long-con/index.js",
   "scripts": [
-    "lib/node-console/index.js"
+    "lib/long-con/index.js"
   ],
   "license": "MIT"
 }

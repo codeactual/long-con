@@ -15,7 +15,7 @@ require('sinon-doublist')(sinon, 'mocha');
 describe('nc', function() {
   'use strict';
 
-  describe('NodeConsole', function() {
+  describe('LongCon', function() {
     beforeEach(function() {
       this.nc = nc.create();
     });

@@ -5,5 +5,5 @@
  * - Auto-injection of the node-land require() when installed w/ NPM.
  * - Manual-injection when install w/ component.
  */
-module.exports = require('./dist/node-console');
+module.exports = require('./dist/long-con');
 module.exports.requireNative = require;

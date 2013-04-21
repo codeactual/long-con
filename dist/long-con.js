@@ -188,11 +188,11 @@
             }
         }
     });
-    require.register("node-console/lib/node-console/index.js", function(exports, require, module) {
+    require.register("long-con/lib/long-con/index.js", function(exports, require, module) {
         "use strict";
         module.exports = {
             create: create,
-            NodeConsole: NodeConsole,
+            LongCon: LongCon,
             mixin: mixin,
             requireComponent: require,
             requireNative: null
@@ -205,9 +205,9 @@
         var getProp = tea.get;
         var setProp = tea.set;
         function create() {
-            return new NodeConsole();
+            return new LongCon();
         }
-        function NodeConsole() {
+        function LongCon() {
             this.settings = {
                 namespace: "",
                 nlFirst: false,
@@ -222,8 +222,8 @@
             clc = clc || requireNative("cli-color");
             sprintf = sprintf || requireNative("util").format;
         }
-        configurable(NodeConsole.prototype);
-        NodeConsole.prototype.log = function(name, fn, color, colorBody) {
+        configurable(LongCon.prototype);
+        LongCon.prototype.log = function(name, fn, color, colorBody) {
             if (this.get("quiet")) {
                 return;
             }
@@ -245,16 +245,16 @@
             }
             fn(joined);
         };
-        NodeConsole.prototype.create = function(name, fn, color, colorBody) {
+        LongCon.prototype.create = function(name, fn, color, colorBody) {
             var self = this;
             function logger() {
                 self.log.apply(self, [ name, fn, color, colorBody ].concat([].slice.call(arguments)));
             }
-            logger.push = function nodeConsolePush() {
+            logger.push = function longConPush() {
                 logger.apply(self, arguments);
                 self.traceDepth++;
             };
-            logger.pop = function nodeConsolePop() {
+            logger.pop = function longConPop() {
                 self.traceDepth--;
                 if (arguments.length) {
                     logger.apply(self, arguments);
@@ -262,11 +262,11 @@
             };
             return logger;
         };
-        NodeConsole.prototype.traceMethods = function(name, obj, logger, filter, omit) {
+        LongCon.prototype.traceMethods = function(name, obj, logger, filter, omit) {
             var self = this;
             filter = filter || /.?/;
             omit = omit || /a^/;
-            Object.keys(obj).forEach(function nodeConsoleTraceMethodsIter(key) {
+            Object.keys(obj).forEach(function longConTraceMethodsIter(key) {
                 if (typeof obj[key] !== "function") {
                     return;
                 }
@@ -277,7 +277,7 @@
                     return;
                 }
                 var orig = obj[key];
-                obj[key] = function nodeConsoleTraceMethodsWrapper() {
+                obj[key] = function longConTraceMethodsWrapper() {
                     logger.push(name + "#" + key);
                     var res = orig.apply(this, arguments);
                     logger.pop();
@@ -286,25 +286,25 @@
             });
         };
         function mixin(ext) {
-            extend(NodeConsole.prototype, ext);
+            extend(LongCon.prototype, ext);
         }
         function defColorFn(str) {
             return str;
         }
     });
-    require.alias("visionmedia-configurable.js/index.js", "node-console/deps/configurable.js/index.js");
-    require.alias("codeactual-extend/index.js", "node-console/deps/extend/index.js");
-    require.alias("qualiancy-tea-properties/lib/properties.js", "node-console/deps/tea-properties/lib/properties.js");
-    require.alias("qualiancy-tea-properties/lib/properties.js", "node-console/deps/tea-properties/index.js");
+    require.alias("visionmedia-configurable.js/index.js", "long-con/deps/configurable.js/index.js");
+    require.alias("codeactual-extend/index.js", "long-con/deps/extend/index.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "long-con/deps/tea-properties/lib/properties.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "long-con/deps/tea-properties/index.js");
     require.alias("qualiancy-tea-properties/lib/properties.js", "qualiancy-tea-properties/index.js");
-    require.alias("node-console/lib/node-console/index.js", "node-console/index.js");
+    require.alias("long-con/lib/long-con/index.js", "long-con/index.js");
     if (typeof exports == "object") {
-        module.exports = require("node-console");
+        module.exports = require("long-con");
     } else if (typeof define == "function" && define.amd) {
         define(function() {
-            return require("node-console");
+            return require("long-con");
         });
     } else {
-        window["nc"] = require("node-console");
+        window["nc"] = require("long-con");
     }
 })();

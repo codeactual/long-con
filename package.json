@@ -1,5 +1,5 @@
 {
-  "name": "codeactual-node-console",
+  "name": "codeactual-long-con",
   "description": "Create a console logger w/ formatting, timestamp, color, namespace",
   "version": "0.1.0",
   "main": "index.js",
@@ -11,12 +11,12 @@
     }
   ],
   "bugs": {
-    "url": "https://github.com/codeactual/node-console/issues"
+    "url": "https://github.com/codeactual/long-con/issues"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/codeactual/node-console.git"
+    "url": "https://github.com/codeactual/long-con.git"
   },
   "devDependencies": {
     "chai": "~1.5.0",

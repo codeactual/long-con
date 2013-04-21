@@ -39,7 +39,7 @@ module.exports = function(grunt) {
           beautify: true
         },
         files: {
-          'dist/node-console.js': 'dist/node-console.js'
+          'dist/long-con.js': 'dist/long-con.js'
         }
       }
     },
@@ -50,10 +50,10 @@ module.exports = function(grunt) {
         stderr: true
       },
       build: {
-        command: 'component install --dev && component build --standalone NodeConsole --name node-console --out dist --dev'
+        command: 'component install --dev && component build --standalone LongCon --name long-con --out dist --dev'
       },
       dist: {
-        command: 'component build --standalone nc --name node-console --out dist'
+        command: 'component build --standalone nc --name long-con --out dist'
       }
     }
   });

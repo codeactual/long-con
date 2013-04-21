@@ -1,8 +1,8 @@
-# node-console
+# long-con
 
 Create a console logger w/ formatting, timestamp, color, namespace
 
-[![Build Status](https://travis-ci.org/codeactual/node-console.png)](https://travis-ci.org/codeactual/node-console)
+[![Build Status](https://travis-ci.org/codeactual/long-con.png)](https://travis-ci.org/codeactual/long-con)
 
 ## Example
 
@@ -13,17 +13,17 @@ Create a console logger w/ formatting, timestamp, color, namespace
 
 ### [Component](https://github.com/component/component)
 
-    component install codeactual/node-console
+    component install codeactual/long-con
 
-### [NPM](https://npmjs.org/package/node-console)
+### [NPM](https://npmjs.org/package/long-con)
 
-    npm install node-console
+    npm install long-con
 
 ## API
 
 ### create()
 
-> Return a new NodeConsole instance.
+> Return a new LongCon instance.
 
 ## License
 
