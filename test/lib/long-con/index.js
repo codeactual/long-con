@@ -84,10 +84,17 @@ describe('LongCon', function() {
       this.fn.should.have.been.calledWithExactly('mylogger |    |    |    7');
     });
 
-    it.skip('should accept util.format args', function() {
+    it('should accept util.format args', function() {
+      this.lc.log(this.name, this.fn, null, null, '%s %j', 'foo', {a: 'b'});
+      this.fn.should.have.been.calledWithExactly('mylogger foo {"a":"b"}');
     });
 
-    it.skip('should optionally prepend newline to 1st line', function() {
+    it('should optionally prepend newline to 1st line', function() {
+      this.lc.set('nlFirst', true);
+      this.lc.log(this.name, this.fn, null, null, 'foo');
+      this.lc.log(this.name, this.fn, null, null, 'bar');
+      this.fn.should.have.been.calledWithExactly('\nmylogger foo');
+      this.fn.should.have.been.calledWithExactly('mylogger bar');
     });
   });
 
