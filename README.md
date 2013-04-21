@@ -11,10 +11,6 @@ Create a console logger w/ formatting, timestamp, color, namespace
 
 ## Installation
 
-### [Component](https://github.com/component/component)
-
-    component install codeactual/long-con
-
 ### [NPM](https://npmjs.org/package/long-con)
 
     npm install long-con
