@@ -16,7 +16,8 @@ describe('LongCon', function() {
     this.lc = longCon.create();
     this.name = 'mylogger';
     this.fn = this.spy();
-    this.color = 'red.bold';
+    this.nameColor = 'red.bold';
+    this.bodyColor = 'yellow';
     this.ns = 'myLib';
     this.traceIndent = '----';
     this.msg = 'foo';
@@ -35,19 +36,19 @@ describe('LongCon', function() {
     });
 
     it('should use custom color', function() {
-      this.lc.log(this.name, this.fn, this.color, null, this.msg);
+      this.lc.log(this.name, this.fn, this.nameColor, null, this.msg);
       this.fn.should.have.been.calledWithExactly('\x1B[1m\x1B[31mmylogger\x1B[39m\x1B[22m foo');
     });
 
     it('should optionally apply name color to body', function() {
-      this.lc.log(this.name, this.fn, this.color, true, this.msg);
+      this.lc.log(this.name, this.fn, this.nameColor, true, this.msg);
       this.fn.should.have.been.calledWithExactly(
         '\x1B[1m\x1B[31mmylogger\x1B[39m\x1B[22m \x1B[1m\x1B[31mfoo\x1B[39m\x1B[22m'
       );
     });
 
     it('should optionally apply separate color to body', function() {
-      this.lc.log(this.name, this.fn, this.color, 'yellow', this.msg);
+      this.lc.log(this.name, this.fn, this.nameColor, this.bodyColor, this.msg);
       this.fn.should.have.been.calledWithExactly(
         '\x1B[1m\x1B[31mmylogger\x1B[39m\x1B[22m \x1B[33mfoo\x1B[39m'
       );
@@ -99,46 +100,133 @@ describe('LongCon', function() {
   });
 
   describe('#create', function() {
+    beforeEach(function() {
+      this.logStub = this.stub(this.lc, 'log');
+      this.logger = this.lc.create(this.name, this.fn, this.nameColor, this.bodyColor);
+    });
+
     describe('produced function', function() {
-      it.skip('should partially apply #log', function() {
+      it('should partially apply #log', function() {
+        this.logger('foo');
+        this.logStub.should.have.been.calledWithExactly(
+          this.name, this.fn, this.nameColor, this.bodyColor, 'foo'
+        );
       });
     });
 
     describe('produced #push', function() {
-      it.skip('should partially apply #logger', function() {
+      beforeEach(function() {
+        this.logger.push('foo');
+      });
+
+      it('should partially apply #logger', function() {
+        this.logStub.should.have.been.calledWithExactly(
+          this.name, this.fn, this.nameColor, this.bodyColor, 'foo'
+        );
+      });
+
+      it('should update trace depth counter', function() {
+        this.lc.traceDepth.should.equal(1);
       });
     });
 
     describe('produced #pop', function() {
-      it.skip('should partially apply #logger', function() {
+      it('should not partially apply #logger on zero args', function() {
+        this.logger.pop();
+        this.logStub.should.not.have.been.called;
       });
 
-      it.skip('should update trace depth counter', function() {
+      it('should optionally allow util.format args', function() {
+        this.logger.pop('%s %d', 'foo', 5.0);
+        this.logStub.should.have.been.calledWithExactly(
+          this.name, this.fn, this.nameColor, this.bodyColor, '%s %d', 'foo', 5.0
+        );
+      });
+
+      it('should update trace depth counter', function() {
+        this.lc.traceDepth.should.equal(0);
+        this.logger.push();
+        this.lc.traceDepth.should.equal(1);
+        this.logger.push();
+        this.lc.traceDepth.should.equal(2);
+        this.logger.pop();
+        this.lc.traceDepth.should.equal(1);
+        this.logger.pop();
+        this.lc.traceDepth.should.equal(0);
       });
     });
   });
 
   describe('#traceMethods', function() {
-    it.skip('should optionally filter by method', function() {
+    beforeEach(function() {
+      var self = this;
+      this.method1Stub = this.stub();
+      this.method1Res = {iAmA: 'method1 result'};
+      this.method1Stub.returns(this.method1Res);
+      this.method2Stub = this.stub();
+      this.method2Res = {iAmA: 'method2 result'};
+      this.method2Stub.returns(this.method2Res);
+      this.obj = {
+        num: 5,
+        str: 'five',
+        arr: [1, 2],
+        method1: this.method1Stub,
+        method2: this.method2Stub
+      };
+      this.logger = this.lc.create('mylogger', this.fn);
     });
 
-    it.skip('should optionally omit by method', function() {
+    it('should trace all methods by default', function() {
+      this.lc.traceMethods('someObj', this.obj, this.logger);
+      this.obj.method1.call(this.obj);
+      this.fn.should.have.been.calledWithExactly('mylogger someObj#method1');
+      this.obj.method2.call(this.obj);
+      this.fn.should.have.been.calledWithExactly('mylogger someObj#method2');
     });
 
-    it.skip('should ignore non-function prop', function() {
+    it('should optionally filter by method', function() {
+      this.lc.traceMethods('someObj', this.obj, this.logger, /method1/);
+      this.obj.method1.call(this.obj);
+      this.fn.should.have.been.calledWithExactly('mylogger someObj#method1');
+      this.obj.method2.call(this.obj);
+      this.fn.should.not.have.been.calledWithExactly('mylogger someObj#method2');
+    });
+
+    it('should optionally omit by method', function() {
+      this.lc.traceMethods('someObj', this.obj, this.logger, null, /1/);
+      this.obj.method1.call(this.obj);
+      this.fn.should.not.have.been.calledWithExactly('mylogger someObj#method1');
+      this.obj.method2.call(this.obj);
+      this.fn.should.have.been.calledWithExactly('mylogger someObj#method2');
+    });
+
+    it('should ignore non-function prop', function() {
+      this.lc.traceMethods('someObj', this.obj, this.logger);
+      this.obj.num.should.equal(5);
+      this.obj.str.should.equal('five');
+      this.obj.arr.should.deep.equal([1, 2]);
     });
 
     describe('method wrapper', function() {
-      it.skip('should push trace level', function() {
+      it('should update trace level', function() {
+        var pushSpy = this.spy(this.logger, 'push');
+        var popSpy = this.spy(this.logger, 'pop');
+        this.lc.traceMethods('someObj', this.obj, this.logger);
+        this.obj.method1.call(this.obj);
+        pushSpy.should.have.been.calledWithExactly('someObj#method1');
+        popSpy.should.have.been.calledWithExactly();
       });
 
-      it.skip('should call method transparently', function() {
-        // context
-        // arguments
-        // return val
-      });
+      it('should call method transparently', function() {
+        this.lc.traceMethods('someObj', this.obj, this.logger);
 
-      it.skip('should pop trace level', function() {
+        this.obj.method1.call(this.obj, 'foo', 'bar').should.equal(this.method1Res);
+        this.method1Stub.should.have.been.calledWithExactly('foo', 'bar');
+        this.method1Stub.should.have.been.calledOn(this.obj);
+
+        this.obj.method2.call(this.obj, 'bar', 'foo').should.equal(this.method2Res);
+        this.method2Stub.should.have.been.calledWithExactly('bar', 'foo');
+        this.method2Stub.should.have.been.calledOn(this.obj);
       });
     });
   });
