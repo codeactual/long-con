@@ -5,9 +5,7 @@ var should = chai.should();
 chai.Assertion.includeStack = true;
 chai.use(require('sinon-chai'));
 
-var nc = require('../../..');
-
-var requireComponent = require('../../../lib/component/require');
+var longCon = require('../../..');
 
 require('sinon-doublist')(sinon, 'mocha');
 
@@ -15,32 +13,46 @@ describe('LongCon', function() {
   'use strict';
 
   beforeEach(function() {
-    this.lc = lc.create();
+    this.lc = longCon.create();
+    this.name = 'mylogger';
+    this.fn = this.spy();
+    this.color = 'red.bold';
+    this.ns = 'lib namespace';
+    this.traceIndent = '----';
+    this.msg = 'foo';
   });
 
   describe('#log', function() {
-    it.skip('should abort in quiet mode', function() {
+    it('should abort in quiet mode', function() {
+      this.lc.set('quiet', true);
+      this.lc.log(this.name, this.fn);
+      this.fn.should.not.have.been.called;
     });
 
-    it.skip('should use default color', function() {
+    it('should use default color', function() {
+      this.lc.log(this.name, this.fn, null, null, this.msg);
+      this.fn.should.have.been.calledWithExactly('mylogger foo');
     });
 
-    it.skip('should use custom color', function() {
+    it('should use custom color', function() {
+      this.lc.log(this.name, this.fn, this.color, null, this.msg);
+      this.fn.should.have.been.calledWithExactly('\x1B[1m\x1B[31mmylogger\x1B[39m\x1B[22m foo');
     });
 
-    it.skip('should not apply color to body by default', function() {
-    });
-
-    it.skip('should optionally apply color to body', function() {
+    it('should optionally apply color to body', function() {
+      this.lc.log(this.name, this.fn, this.color, true, this.msg);
+      this.fn.should.have.been.calledWithExactly(
+        '\x1B[1m\x1B[31mmylogger\x1B[39m\x1B[22m \x1B[1m\x1B[31mfoo\x1B[39m\x1B[22m'
+      );
     });
 
     it.skip('should optionally display namespace', function() {
     });
 
-    it.skip('should display timestamp by default', function() {
+    it.skip('should omit timestamp by default', function() {
     });
 
-    it.skip('should optionally omit timestamp', function() {
+    it.skip('should optionally display timestamp', function() {
     });
 
     it.skip('should optionally display lanes', function() {
