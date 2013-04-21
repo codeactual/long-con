@@ -30,7 +30,7 @@
     "sinon-doublist": "~0.3.0"
   },
   "scripts": {
-    "test": "grunt build && mocha --reporter spec --recursive test/lib"
+    "test": "grunt test"
   },
   "gitemplate": {
     "originSha": "2fe43ec799",

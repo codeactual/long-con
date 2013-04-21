@@ -206,6 +206,6 @@
             return require("long-con");
         });
     } else {
-        window["nc"] = require("long-con");
+        window["longCon"] = require("long-con");
     }
 })();
