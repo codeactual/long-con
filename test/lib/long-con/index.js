@@ -17,7 +17,7 @@ describe('LongCon', function() {
     this.name = 'mylogger';
     this.fn = this.spy();
     this.color = 'red.bold';
-    this.ns = 'lib namespace';
+    this.ns = 'myLib';
     this.traceIndent = '----';
     this.msg = 'foo';
   });
@@ -39,23 +39,49 @@ describe('LongCon', function() {
       this.fn.should.have.been.calledWithExactly('\x1B[1m\x1B[31mmylogger\x1B[39m\x1B[22m foo');
     });
 
-    it('should optionally apply color to body', function() {
+    it('should optionally apply name color to body', function() {
       this.lc.log(this.name, this.fn, this.color, true, this.msg);
       this.fn.should.have.been.calledWithExactly(
         '\x1B[1m\x1B[31mmylogger\x1B[39m\x1B[22m \x1B[1m\x1B[31mfoo\x1B[39m\x1B[22m'
       );
     });
 
-    it.skip('should optionally display namespace', function() {
+    it('should optionally apply separate color to body', function() {
+      this.lc.log(this.name, this.fn, this.color, 'yellow', this.msg);
+      this.fn.should.have.been.calledWithExactly(
+        '\x1B[1m\x1B[31mmylogger\x1B[39m\x1B[22m \x1B[33mfoo\x1B[39m'
+      );
     });
 
-    it.skip('should omit timestamp by default', function() {
+    it('should optionally display namespace', function() {
+      this.lc.set('namespace', this.ns);
+      this.lc.log(this.name, this.fn, null, null, this.msg);
+      this.fn.should.have.been.calledWithExactly('myLib mylogger foo');
     });
 
-    it.skip('should optionally display timestamp', function() {
+    it('should optionally display timestamp', function() {
+      this.lc.set('time', true);
+      this.lc.log(this.name, this.fn, null, null, this.msg);
+      this.fn.should.have.been.calledWithExactly('[Thu, 01 Jan 1970 00:00:00 GMT] mylogger foo');
     });
 
-    it.skip('should optionally display lanes', function() {
+    it('should optionally display lanes', function() {
+      this.lc.set('traceLanes', true);
+      var logger = this.lc.create(this.name, this.fn);
+      logger('1');
+      this.fn.should.have.been.calledWithExactly('mylogger 1');
+      logger.push('2');
+      this.fn.should.have.been.calledWithExactly('mylogger 2');
+      logger.push('3');
+      this.fn.should.have.been.calledWithExactly('mylogger |    3');
+      logger('4');
+      this.fn.should.have.been.calledWithExactly('mylogger |    |    4');
+      logger('5');
+      this.fn.should.have.been.calledWithExactly('mylogger |    |    5');
+      logger.push('6');
+      this.fn.should.have.been.calledWithExactly('mylogger |    |    6');
+      logger('7');
+      this.fn.should.have.been.calledWithExactly('mylogger |    |    |    7');
     });
 
     it.skip('should accept util.format args', function() {
