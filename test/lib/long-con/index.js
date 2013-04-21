@@ -6,9 +6,8 @@ chai.Assertion.includeStack = true;
 chai.use(require('sinon-chai'));
 
 var nc = require('../../..');
-nc.requireNative = require;
 
-var requireComponent = nc.requireComponent;
+var requireComponent = require('../../../lib/component/require');
 
 require('sinon-doublist')(sinon, 'mocha');
 

@@ -188,116 +188,17 @@
             }
         }
     });
-    require.register("long-con/lib/long-con/index.js", function(exports, require, module) {
-        "use strict";
+    require.register("long-con/lib/component/main.js", function(exports, require, module) {
         module.exports = {
-            create: create,
-            LongCon: LongCon,
-            mixin: mixin,
-            requireComponent: require,
-            requireNative: null
+            requireComponent: require
         };
-        var clc;
-        var sprintf;
-        var configurable = require("configurable.js");
-        var extend = require("extend");
-        var tea = require("tea-properties");
-        var getProp = tea.get;
-        var setProp = tea.set;
-        function create() {
-            return new LongCon();
-        }
-        function LongCon() {
-            this.settings = {
-                namespace: "",
-                nlFirst: false,
-                quiet: false,
-                time: true,
-                traceIndent: "    ",
-                traceLanes: true
-            };
-            this.traceDepth = 0;
-            this.firstLine = true;
-            var requireNative = module.exports.requireNative;
-            clc = clc || requireNative("cli-color");
-            sprintf = sprintf || requireNative("util").format;
-        }
-        configurable(LongCon.prototype);
-        LongCon.prototype.log = function(name, fn, color, colorBody) {
-            if (this.get("quiet")) {
-                return;
-            }
-            var colorFn = color ? getProp(clc, color) : defColorFn;
-            var bodyColorFn = colorBody ? colorFn : defColorFn;
-            var namespace = this.get("namespace");
-            var indent = "";
-            var traceIndent = this.get("traceIndent");
-            var laneCx = traceIndent.length;
-            indent = new Array(this.traceDepth + 1).join(traceIndent);
-            if (this.get("traceLanes")) {
-                indent = indent.replace(new RegExp(".{1," + laneCx + "}", "g"), "|$&");
-            }
-            var sections = [ indent, this.get("time") ? "[" + new Date().toUTCString() + "] " : "", namespace ? namespace + " " : "", name ? colorFn(name) + " " : "", bodyColorFn(sprintf.apply(null, [].slice.call(arguments, 4))) ];
-            var joined = sections.join("");
-            if (this.firstLine && this.get("nlFirst")) {
-                joined = "\n" + joined;
-                this.firstLine = false;
-            }
-            fn(joined);
-        };
-        LongCon.prototype.create = function(name, fn, color, colorBody) {
-            var self = this;
-            function logger() {
-                self.log.apply(self, [ name, fn, color, colorBody ].concat([].slice.call(arguments)));
-            }
-            logger.push = function longConPush() {
-                logger.apply(self, arguments);
-                self.traceDepth++;
-            };
-            logger.pop = function longConPop() {
-                self.traceDepth--;
-                if (arguments.length) {
-                    logger.apply(self, arguments);
-                }
-            };
-            return logger;
-        };
-        LongCon.prototype.traceMethods = function(name, obj, logger, filter, omit) {
-            var self = this;
-            filter = filter || /.?/;
-            omit = omit || /a^/;
-            Object.keys(obj).forEach(function longConTraceMethodsIter(key) {
-                if (typeof obj[key] !== "function") {
-                    return;
-                }
-                if (!filter.test(key)) {
-                    return;
-                }
-                if (omit.test(key)) {
-                    return;
-                }
-                var orig = obj[key];
-                obj[key] = function longConTraceMethodsWrapper() {
-                    logger.push(name + "#" + key);
-                    var res = orig.apply(this, arguments);
-                    logger.pop();
-                    return res;
-                };
-            });
-        };
-        function mixin(ext) {
-            extend(LongCon.prototype, ext);
-        }
-        function defColorFn(str) {
-            return str;
-        }
     });
     require.alias("visionmedia-configurable.js/index.js", "long-con/deps/configurable.js/index.js");
     require.alias("codeactual-extend/index.js", "long-con/deps/extend/index.js");
     require.alias("qualiancy-tea-properties/lib/properties.js", "long-con/deps/tea-properties/lib/properties.js");
     require.alias("qualiancy-tea-properties/lib/properties.js", "long-con/deps/tea-properties/index.js");
     require.alias("qualiancy-tea-properties/lib/properties.js", "qualiancy-tea-properties/index.js");
-    require.alias("long-con/lib/long-con/index.js", "long-con/index.js");
+    require.alias("long-con/lib/component/main.js", "long-con/index.js");
     if (typeof exports == "object") {
         module.exports = require("long-con");
     } else if (typeof define == "function" && define.amd) {

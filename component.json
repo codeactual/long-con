@@ -10,9 +10,9 @@
     "qualiancy/tea-properties": "0.1.0"
   },
   "development": {},
-  "main": "lib/long-con/index.js",
+  "main": "lib/component/main.js",
   "scripts": [
-    "lib/long-con/index.js"
+    "lib/component/main.js"
   ],
   "license": "MIT"
 }
