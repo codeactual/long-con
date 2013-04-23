@@ -184,8 +184,17 @@ describe('LongCon', function() {
       this.fn.should.have.been.calledWithExactly('mylogger someObj#method2');
     });
 
-    it('should optionally filter by method', function() {
+    it('should optionally filter by method regex', function() {
       this.lc.traceMethods('someObj', this.obj, this.logger, /method1/);
+      this.obj.method1.call(this.obj);
+      this.fn.should.have.been.calledWithExactly('mylogger someObj#method1');
+      this.obj.method2.call(this.obj);
+      this.fn.should.not.have.been.calledWithExactly('mylogger someObj#method2');
+    });
+
+    it('should optionally filter by method object keys', function() {
+      var objFilter = {method1: function() {}};
+      this.lc.traceMethods('someObj', this.obj, this.logger, objFilter);
       this.obj.method1.call(this.obj);
       this.fn.should.have.been.calledWithExactly('mylogger someObj#method1');
       this.obj.method2.call(this.obj);
