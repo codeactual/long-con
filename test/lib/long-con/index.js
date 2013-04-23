@@ -125,8 +125,8 @@ describe('LongCon', function() {
         );
       });
 
-      it('should update trace depth counter', function() {
-        this.lc.traceDepth.should.equal(1);
+      it('should update stack depth counter', function() {
+        this.lc.stackDepth.should.equal(1);
       });
     });
 
@@ -143,16 +143,16 @@ describe('LongCon', function() {
         );
       });
 
-      it('should update trace depth counter', function() {
-        this.lc.traceDepth.should.equal(0);
+      it('should update stack depth counter', function() {
+        this.lc.stackDepth.should.equal(0);
         this.logger.push();
-        this.lc.traceDepth.should.equal(1);
+        this.lc.stackDepth.should.equal(1);
         this.logger.push();
-        this.lc.traceDepth.should.equal(2);
+        this.lc.stackDepth.should.equal(2);
         this.logger.pop();
-        this.lc.traceDepth.should.equal(1);
+        this.lc.stackDepth.should.equal(1);
         this.logger.pop();
-        this.lc.traceDepth.should.equal(0);
+        this.lc.stackDepth.should.equal(0);
       });
     });
   });
