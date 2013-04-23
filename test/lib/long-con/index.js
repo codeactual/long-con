@@ -184,7 +184,7 @@ describe('LongCon', function() {
       this.fn.should.have.been.calledWithExactly('mylogger someObj#method2');
     });
 
-    it('should optionally filter by method regex', function() {
+    it('should optionally filter by regex', function() {
       this.lc.traceMethods('someObj', this.obj, this.logger, /method1/);
       this.obj.method1.call(this.obj);
       this.fn.should.have.been.calledWithExactly('mylogger someObj#method1');
@@ -192,16 +192,36 @@ describe('LongCon', function() {
       this.fn.should.not.have.been.calledWithExactly('mylogger someObj#method2');
     });
 
-    it('should optionally filter by method object keys', function() {
-      var objFilter = {method1: function() {}};
-      this.lc.traceMethods('someObj', this.obj, this.logger, objFilter);
-      this.obj.method1.call(this.obj);
-      this.fn.should.have.been.calledWithExactly('mylogger someObj#method1');
-      this.obj.method2.call(this.obj);
-      this.fn.should.not.have.been.calledWithExactly('mylogger someObj#method2');
+    it('should optionally filter by object keys', function() {
+      var self = this;
+      function Klass() { // Use case: filter by Klass.prototype keys
+        this.console = longCon.create();
+        this.log = this.console.create(null, self.fn);
+        this.console.traceMethods('Klass', this, this.log, Klass.prototype);
+      }
+      Klass.prototype.foo = function() {
+        this.log('foo1');
+        this.bar();
+        this.log('foo2');
+      };
+      Klass.prototype.bar = function() {
+        this.log('bar1');
+        this.baz();
+        this.log('bar2');
+      };
+      Klass.prototype.baz = function() { this.log('baz'); };
+      (new Klass()).foo();
+      this.fn.should.have.been.calledWithExactly('Klass#foo');
+      this.fn.should.have.been.calledWithExactly('|    foo1');
+      this.fn.should.have.been.calledWithExactly('|    Klass#bar');
+      this.fn.should.have.been.calledWithExactly('|    |    bar1');
+      this.fn.should.have.been.calledWithExactly('|    |    Klass#baz');
+      this.fn.should.have.been.calledWithExactly('|    |    |    baz');
+      this.fn.should.have.been.calledWithExactly('|    |    bar2');
+      this.fn.should.have.been.calledWithExactly('|    foo2');
     });
 
-    it('should optionally omit by method', function() {
+    it('should optionally omit by regex', function() {
       this.lc.traceMethods('someObj', this.obj, this.logger, null, /1/);
       this.obj.method1.call(this.obj);
       this.fn.should.not.have.been.calledWithExactly('mylogger someObj#method1');
