@@ -27,7 +27,8 @@
     "mocha": "~1.9.0",
     "sinon": "~1.6.0",
     "sinon-chai": "~2.3.1",
-    "sinon-doublist": "~0.3.0"
+    "sinon-doublist": "~0.3.0",
+    "dox": "~0.4.3"
   },
   "scripts": {
     "test": "grunt test"
