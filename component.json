@@ -3,7 +3,13 @@
   "repo": "codeactual/long-con",
   "description": "Create a console logger w/ formatting, timestamp, color, namespace",
   "version": "0.1.0",
-  "keywords": [],
+  "keywords": [
+    "console",
+    "log",
+    "logger",
+    "logging",
+    "colors"
+  ],
   "dependencies": {
     "visionmedia/configurable.js": "f87ca5f",
     "codeactual/extend": "0.1.0",
