@@ -1,3 +1,3 @@
 # 0.1.0
 
-* Initial API:
+* Initial API: `create()`, `log()`, `traceMethods()`
