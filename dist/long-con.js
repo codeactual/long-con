@@ -188,6 +188,43 @@
             }
         }
     });
+    require.register("manuelstofer-each/index.js", function(exports, require, module) {
+        "use strict";
+        var nativeForEach = [].forEach;
+        module.exports = function(obj, iterator, context) {
+            if (obj == null) return;
+            if (nativeForEach && obj.forEach === nativeForEach) {
+                obj.forEach(iterator, context);
+            } else if (obj.length === +obj.length) {
+                for (var i = 0, l = obj.length; i < l; i++) {
+                    if (iterator.call(context, obj[i], i, obj) === {}) return;
+                }
+            } else {
+                for (var key in obj) {
+                    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                        if (iterator.call(context, obj[key], key, obj) === {}) return;
+                    }
+                }
+            }
+        };
+    });
+    require.register("codeactual-is/index.js", function(exports, require, module) {
+        "use strict";
+        var each = require("each");
+        var types = [ "Arguments", "Function", "String", "Number", "Date", "RegExp", "Array" ];
+        each(types, function(type) {
+            var method = type === "Function" ? type : type.toLowerCase();
+            module.exports[method] = function(obj) {
+                return Object.prototype.toString.call(obj) === "[object " + type + "]";
+            };
+        });
+        if (Array.isArray) {
+            module.exports.array = Array.isArray;
+        }
+        module.exports.object = function(obj) {
+            return obj === Object(obj);
+        };
+    });
     require.register("long-con/lib/component/main.js", function(exports, require, module) {
         module.exports = {
             requireComponent: require
@@ -198,6 +235,8 @@
     require.alias("qualiancy-tea-properties/lib/properties.js", "long-con/deps/tea-properties/lib/properties.js");
     require.alias("qualiancy-tea-properties/lib/properties.js", "long-con/deps/tea-properties/index.js");
     require.alias("qualiancy-tea-properties/lib/properties.js", "qualiancy-tea-properties/index.js");
+    require.alias("codeactual-is/index.js", "long-con/deps/is/index.js");
+    require.alias("manuelstofer-each/index.js", "codeactual-is/deps/each/index.js");
     require.alias("long-con/lib/component/main.js", "long-con/index.js");
     if (typeof exports == "object") {
         module.exports = require("long-con");

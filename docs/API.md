@@ -1,7 +1,22 @@
+  - [exports.LongCon](#exportslongcon)
+  - [exports.create()](#exportscreate)
+  - [exports.extend()](#exportsextendextobject)
   - [LongCon()](#longcon)
   - [LongCon.log()](#longconlognamestringfnfunctionnamecolorstringbodycolorbooleanstringargsmixed)
-  - [LongCon.create()](#longconcreatenamestringfnfunctionnamecolorfnstringbodycolorbooleanstring)
-  - [LongCon.traceMethods()](#longcontracemethodsnamestringobjobjectloggerfunctionfilterregexpobjectomitregexp)
+  - [LongCon.create()](#longconcreate)
+  - [LongCon.traceMethods()](#longcontracemethodsnamestringobjobjectloggerfunctionfilterallregexpobjectomitnoneregexp)
+
+## exports.LongCon
+
+  LongCon constructor.
+
+## exports.create()
+
+  Return a new LongCon() instance.
+
+## exports.extend(ext:object)
+
+  Extend `LongCon.prototype`
 
 ## LongCon()
 
@@ -30,9 +45,9 @@
   Configuration:
   
    - `{string} [namespace='']` Prepend to each message
-   - `{string} [nlFirst=false]` Prepend \n to first log
+   - `{string} [nlFirst=false]` Prepend `\n` to first log
    - `{string} [quiet=false]` Drop all messages
-   - `{string} [time=false]` Prepend toUTCString()
+   - `{string} [time=false]` Prepend `toUTCString()`
    - `{string} [traceIndent='    ']` Represent a stack level
    - `{string} [traceLanes=true]` Prepend each traceIndent with '|'
   
@@ -43,17 +58,29 @@
 
 ## LongCon.log(name:string, fn:function, nameColor:string, bodyColor:boolean|string, args*:mixed)
 
-  util.format() wrapper with timestamp and injected output function.
-  Respects --quiet. Applies color selection.
-
-## LongCon.create(name:string, fn:function, nameColorFn:string, bodyColor:boolean|string)
-
-  Create a log() wrapper with fixed arguments.
-
-## LongCon.traceMethods(name:string, obj:object, Logger:function, filter:regexp|object, omit:regexp)
-
-  Wrap an object's methods to automatically push/pop for (sync) tracing.
+  `util.format()` wrapper with timestamp and injected output function.
+  Respects `--quiet`. Applies color selection.
   
-  Parameter notes:
+  Parameters:
+  
+  - `bodyColor`
+   - `{boolean}` If true, match 'nameColor'
+   - `{string}` Custom cli-color
+
+## LongCon.create()
+
+  Create a `log()` wrapper with fixed arguments.
+  
+  Returned function's properties:
+  
+  - `{function} push`: Accepts same args. Pushes a stack level.
+  - `{function} pop`: Accepts same args. Pops a stack level.
+
+## LongCon.traceMethods(name:string, obj:object, logger:function, [filter=all]:regexp|object, [omit=none]:regexp)
+
+  Wrap an object's methods to allow log messages to appear within a stack trace
+  isolated to that object.
+  
+  Parameters:
   
   - `filter`: If an object, its keys are used.
