@@ -60,7 +60,7 @@ module.exports = function(grunt) {
         command: "mocha --colors --reporter spec --recursive test/lib"
       },
       dox_lib: {
-        command: 'dox --api < lib/long-con/index.js > docs/API.md'
+        command: 'gitemplate-dox --input lib/long-con/index.js --output docs/LongCon.md'
       }
     }
   });

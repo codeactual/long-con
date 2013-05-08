@@ -57,9 +57,9 @@ Klass.prototype.baz = function() {
 
     npm install long-con
 
-## LongCon API
+## API
 
-[Documentation](docs/API.md)
+[Documentation](docs/LongCon.md)
 
 ## License
 
