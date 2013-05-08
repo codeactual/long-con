@@ -2,7 +2,7 @@
   "name": "long-con",
   "repo": "codeactual/long-con",
   "description": "Create a console logger w/ formatting, timestamp, color, namespace",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "keywords": [
     "console",
     "log",
