@@ -74,7 +74,7 @@ log('error message: %s', ...);
 # LongCon.prototype.log(name, fn, nameColor, bodyColor, args*)
 
 > `util.format()` wrapper with timestamp and injected output function.
-Respects `--quiet`. Applies color selection.
+Respects `quiet` config. Applies color selection.
 
 **Parameters:**
 
