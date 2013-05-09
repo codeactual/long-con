@@ -28,7 +28,7 @@ var log = longCon.create(null, console.error, 'white.bgRed', 'white.bgGreen');
 
 See [cli-color](https://github.com/medikoo/cli-color) for color names.
 
-### Object-specific stack trace
+### Automatic object-specific stack trace
 
 ```js
 function Klass() {
@@ -65,6 +65,26 @@ Output:
 
 
 See [traceMethods()](docs/Longcon.md).
+
+### Manual stack trace
+
+```js
+var log = longCon.create(null, console.log);
+log.push('foo');
+log('msg1')
+log.push('bar')
+log('msg2')
+log.pop();
+log.pop();
+log('msg3');
+```
+
+    foo
+    |    msg1
+    |    bar
+    |    |    msg2
+    msg3
+
 
 ## Installation
 
