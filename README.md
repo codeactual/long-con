@@ -64,7 +64,7 @@ Output:
     |    foo2
 
 
-See [traceMethods()](docs/Longcon.md).
+See [traceMethods()](docs/LongCon.md).
 
 ### Manual stack trace
 
