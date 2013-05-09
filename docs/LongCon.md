@@ -12,11 +12,11 @@ _Source: [lib/long-con/index.js](../lib/long-con/index.js)_
 
 # exports.LongCon()
 
-> [LongCon](#longcon) constructor.
+> Reference to [LongCon](#longcon).
 
 # exports.create()
 
-> Return a new [LongCon](#longcon)() instance.
+> Create a new [LongCon](#longcon).
 
 **Return:**
 
@@ -24,7 +24,7 @@ _Source: [lib/long-con/index.js](../lib/long-con/index.js)_
 
 # exports.extend(ext)
 
-> Extend `LongCon.prototype`
+> Extend [LongCon](#longcon).prototype.
 
 **Parameters:**
 
@@ -59,13 +59,17 @@ log('error message: %s', ...);
  - `{string} [nlFirst=false]` Prepend `\n` to first log
  - `{string} [quiet=false]` Drop all messages
  - `{string} [time=false]` Prepend `toUTCString()`
- - `{string} [traceIndent='    ']` Represent a stack level
- - `{string} [traceLanes=true]` Prepend each traceIndent with '|'
+ - `{string} [traceIndent='    ']` Represent a stack level (default: 4 spaces)
+ - `{string} [traceLanes=true]` Prepend each traceIndent with `|`
 
 **Properties:**
 
  - `{number} [stackDepth=0]` Used to size indentation and draw trace lanes
  - `{boolean} firstLine` Supports `nlFirst` config option
+
+**See:**
+
+- [cli-color](https://github.com/medikoo/cli-color)
 
 # LongCon.prototype.log(name, fn, nameColor, bodyColor, args*)
 
@@ -81,31 +85,40 @@ Respects `--quiet`. Applies color selection.
 **Parameters:**
 
 - `{string} name` Source logger's name, ex. 'stderr'
-- `{function} fn` Ex. console.log
-- `{string} nameColor` 'name' string cli-color, ex. 'red.bold' or 'yellow'
+- `{function} fn` Ex. `console.error`
+- `{string} nameColor` `name` color, ex. 'yellow' or 'white.bgRed'
+
+  - `cli-color` foreground and optional background
+
 - `{boolean | string} bodyColor`
 
-{boolean} If true, match 'nameColor'.
-{string} Custom cli-color.
+{boolean} If true, match `nameColor`
+{string} Custom `cli-color`
 
-- `{mixed} args*` For util.format()
-
-# LongCon.prototype.create()
-
-> Create a `log()` wrapper with fixed arguments.
-
-**Returned function's properties:**
-
-- `{function} push`: Accepts same args. Pushes a stack level.
-- `{function} pop`: Accepts same args. Pops a stack level.
-
-**Return:**
-
-`{function}` Accepts util.format() arguments
+- `{mixed} args*` `util.format()` compatible
 
 **See:**
 
-- `log()` for @param docs
+- [cli-color](https://github.com/medikoo/cli-color)
+
+# LongCon.prototype.create()
+
+> Create a [LongCon.prototype.log](#longconprototypelogname-fn-namecolor-bodycolor-args) wrapper with fixed arguments.
+
+Returned function ('primary') also has two properties.
+
+- `{function} push`: Emits a log message and pushes a stack level.
+  - Accepts same arguments as primary.
+- `{function} pop`: Pops a stack level. Optionally emits a log message.
+  - Optionally accepts same arguments as primary.
+
+**Return:**
+
+`{function}` Accepts `util.format()` arguments
+
+**See:**
+
+- [LongCon.prototype.log](#longconprototypelogname-fn-namecolor-bodycolor-args) for fixable arguments
 
 # LongCon.prototype.traceMethods(name, obj, logger, [filter=all], [omit=none])
 
@@ -120,7 +133,7 @@ isolated to that object.
 
 - `{string} name` Uniquely identify the object
 - `{object} obj`
-- `{function} logger` from create()
+- `{function} logger` From [LongCon.prototype.create](#longconprototypecreate)
 - `{regexp | object} [filter=all]` Include matching key names
 - `{regexp} [omit=none]` Exclude matching key names
 
