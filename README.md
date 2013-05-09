@@ -4,10 +4,12 @@ Create a console logger w/ formatting, timestamp, color, namespace
 
 [![Build Status](https://travis-ci.org/codeactual/long-con.png)](https://travis-ci.org/codeactual/long-con)
 
-## Example: Timestamp and namespace
+## Examples
+
+### stdout, timestamp, namespaces
 
 ```js
-var lc = require('long-con');.create();
+var longCon = require('long-con');.create();
 longCon.set('time', true).set('namespace', 'myLib');
 
 var log = longCon.create('cache');
@@ -16,7 +18,17 @@ var log = longCon.create('cache');
 log('hit key: %s', 'key-name');
 ```
 
-## Example: Object-specific stack trace w/ `traceMethods()`
+### stderr, color, no namespace
+
+```js
+// namespace: white foreground, red background
+// body: white foreground, green background
+var log = longCon.create(null, console.error, 'white.bgRed', 'white.bgGreen');
+```
+
+See [cli-color](https://github.com/medikoo/cli-color) for color names.
+
+### Object-specific stack trace
 
 ```js
 function Klass() {
@@ -40,7 +52,7 @@ Klass.prototype.baz = function() {
 (new Klass()).foo();
 ```
 
-`console.log()` receives:
+Output:
 
     Klass#foo
     |    foo1
@@ -50,6 +62,9 @@ Klass.prototype.baz = function() {
     |    |    |    baz
     |    |    bar2
     |    foo2
+
+
+See [traceMethods()](docs/Longcon.md).
 
 ## Installation
 
