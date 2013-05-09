@@ -80,12 +80,6 @@ Respects `quiet` config. Applies color selection.
 
 **Parameters:**
 
-- `bodyColor`
- - `{boolean}` If true, match 'nameColor'
- - `{string}` Custom cli-color
-
-**Parameters:**
-
 - `{string} name` Source logger's name, ex. 'stderr'
 - `{function} fn` Ex. `console.error`
 - `{string} nameColor` `name` color, ex. 'yellow' or 'white.bgRed'
