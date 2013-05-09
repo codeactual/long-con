@@ -36,7 +36,9 @@ _Source: [lib/long-con/index.js](../lib/long-con/index.js)_
 
 # LongCon()
 
-> Usage:
+> LongCon constructor.
+
+**Usage:**
 
 ```js
 var longCon = require('long-con').create(); // new LongCon() instance
