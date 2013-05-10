@@ -83,7 +83,6 @@ Respects `quiet` config. Applies color selection.
 - `{string} name` Source logger's name, ex. 'stderr'
 - `{function} fn` Ex. `console.error`
 - `{string} nameColor` `name` color, ex. 'yellow' or 'white.bgRed'
-
   - `cli-color` foreground and optional background
 
 - `{boolean | string} bodyColor`
@@ -127,7 +126,6 @@ isolated to that object.
 - `{object} obj`
 - `{function} logger` From [LongCon.prototype.create](#longconprototypecreate)
 - `{regexp | object} [filter=all]` Include matching key names
-
   - `filter`: If an object, its keys are used.
 
 - `{regexp} [omit=none]` Exclude matching key names
