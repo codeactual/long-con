@@ -4,13 +4,13 @@ _Source: [lib/long-con/index.js](../lib/long-con/index.js)_
 
 <a name="tableofcontents"></a>
 
-- <a name="toc_exports"></a>[exports.LongCon](#exportslongcon)
-- [exports.create](#exportscreate)
-- [exports.extend](#exportsextendext)
+- <a name="toc_exportslongcon"></a><a name="toc_exports"></a>[exports.LongCon](#exportslongcon)
+- <a name="toc_exportscreate"></a>[exports.create](#exportscreate)
+- <a name="toc_exportsextendext"></a>[exports.extend](#exportsextendext)
 - <a name="toc_longcon"></a>[LongCon](#longcon)
-- <a name="toc_longconprototype"></a>[LongCon.prototype.log](#longconprototypelogname-fn-namecolor-bodycolor-args)
-- [LongCon.prototype.create](#longconprototypecreate)
-- [LongCon.prototype.traceMethods](#longconprototypetracemethodsname-obj-logger-filterall-omitnone)
+- <a name="toc_longconprototypelogname-fn-namecolor-bodycolor-args"></a><a name="toc_longconprototype"></a>[LongCon.prototype.log](#longconprototypelogname-fn-namecolor-bodycolor-args)
+- <a name="toc_longconprototypecreate"></a>[LongCon.prototype.create](#longconprototypecreate)
+- <a name="toc_longconprototypetracemethodsname-obj-logger-filterall-omitnone"></a>[LongCon.prototype.traceMethods](#longconprototypetracemethodsname-obj-logger-filterall-omitnone)
 
 <a name="exports"></a>
 
