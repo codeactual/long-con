@@ -231,11 +231,15 @@
         };
     });
     require.alias("visionmedia-configurable.js/index.js", "long-con/deps/configurable.js/index.js");
+    require.alias("visionmedia-configurable.js/index.js", "configurable.js/index.js");
     require.alias("codeactual-extend/index.js", "long-con/deps/extend/index.js");
+    require.alias("codeactual-extend/index.js", "extend/index.js");
     require.alias("qualiancy-tea-properties/lib/properties.js", "long-con/deps/tea-properties/lib/properties.js");
     require.alias("qualiancy-tea-properties/lib/properties.js", "long-con/deps/tea-properties/index.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "tea-properties/index.js");
     require.alias("qualiancy-tea-properties/lib/properties.js", "qualiancy-tea-properties/index.js");
     require.alias("codeactual-is/index.js", "long-con/deps/is/index.js");
+    require.alias("codeactual-is/index.js", "is/index.js");
     require.alias("manuelstofer-each/index.js", "codeactual-is/deps/each/index.js");
     require.alias("long-con/lib/component/main.js", "long-con/index.js");
     if (typeof exports == "object") {
@@ -245,6 +249,6 @@
             return require("long-con");
         });
     } else {
-        window["longCon"] = require("long-con");
+        this["longCon"] = require("long-con");
     }
 })();
