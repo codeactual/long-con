@@ -3,9 +3,9 @@ module.exports = function(grunt) {
 
   require('grunt-horde')
     .create(grunt)
-    .demand('projName', 'long-con')
-    .demand('instanceName', 'longCon')
-    .demand('klassName', 'LongCon')
+    .demand('initConfig.projName', 'long-con')
+    .demand('initConfig.instanceName', 'longCon')
+    .demand('initConfig.klassName', 'LongCon')
     .loot('node-component-grunt')
     .attack();
 };
