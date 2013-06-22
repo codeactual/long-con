@@ -49,5 +49,8 @@
   "dependencies": {
     "cli-color": "~0.2.2"
   },
-  "author": "David Smith <codeactual@gmail.com>"
+  "author": "David Smith <codeactual@gmail.com>",
+  "devdir-ci": {
+    "version": 1
+  }
 }
